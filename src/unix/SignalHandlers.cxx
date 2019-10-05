@@ -68,7 +68,7 @@ SignalHandlersInit(EventLoop &loop)
 	sa.sa_handler = SIG_IGN;
 	x_sigaction(SIGPIPE, &sa);
 
-	SignalMonitorRegister(SIGINT, {&loop, HandleShutdownSignal});
+	//SignalMonitorRegister(SIGINT, {&loop, HandleShutdownSignal});
 	SignalMonitorRegister(SIGTERM, {&loop, HandleShutdownSignal});
 
 	SignalMonitorRegister(SIGHUP, {nullptr, handle_reload_event});

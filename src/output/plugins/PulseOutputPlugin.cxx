@@ -223,6 +223,36 @@ pulse_output_clear_mixer(PulseOutput &po, PulseMixer &pm)
 	po.ClearMixer(pm);
 }
 
+void set_volume_cb (pa_context *c, int success, void *userdata)
+{
+
+}
+
+/* A callback function that is called when the
+ * pa_context_get_sink_input_info() operation completes. Saves the
+ * volume field of the specified structure to the global variable volume.
+ */
+static void info_func(struct pa_context *c, const struct pa_sink_input_info *i,
+					  int is_last, void *userdata)
+{
+	LogPulseError(c, "IT'S ME2");
+	char str2[1000];
+	char str3[1000];
+	void* test;
+
+	if (i && i->volume.values)
+	{
+		sprintf(str2, "Volume:%d\n",i->volume.values[0]);
+		LogPulseError(c, str2);
+	}
+	if (i && i->sink)
+	{
+		sprintf(str3, "Sink:%d\n",i->sink);
+		LogPulseError(c, str3);
+		pa_context_set_sink_volume_by_index (c,i->sink, &(i->volume), set_volume_cb, test);
+	}
+}
+
 inline void
 PulseOutput::SetVolume(const pa_cvolume &volume)
 {
@@ -230,15 +260,25 @@ PulseOutput::SetVolume(const pa_cvolume &volume)
 	    pa_stream_get_state(stream) != PA_STREAM_READY)
 		throw std::runtime_error("disconnected");
 
+	/*
 	pa_operation *o =
 		pa_context_set_sink_input_volume(context,
 						 pa_stream_get_index(stream),
-						 &volume, nullptr, nullptr);
-	if (o == nullptr)
-		throw std::runtime_error("failed to set PulseAudio volume");
+						 &volume, nullptr, nullptr);*/
+	void* test;
+	LogPulseError(context, "IT'S ME");
+		/*pa_context_get_sink_input_info(context,
+						pa_stream_get_index(stream),
+						info_func, test);*/
+	pa_context_set_sink_volume_by_index (context,pa_stream_get_device_index(stream), &volume, set_volume_cb, test);
 
-	pa_operation_unref(o);
+	/*if (o == nullptr)
+		throw std::runtime_error("failed to set PulseAudio volume");*/
+
+	// pa_operation_unref(o);
 }
+
+
 
 void
 pulse_output_set_volume(PulseOutput &po, const pa_cvolume *volume)
