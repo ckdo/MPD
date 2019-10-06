@@ -46,6 +46,7 @@ class PulseOutput final : AudioOutput {
 	const char *server;
 	const char *sink;
 	const char *const media_role;
+	const char *const mixer_type;
 
 	PulseMixer *mixer = nullptr;
 
