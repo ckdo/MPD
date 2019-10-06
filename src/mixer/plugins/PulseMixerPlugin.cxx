@@ -142,7 +142,7 @@ pulse_mixer_on_connect(gcc_unused PulseMixer &pm,
 	assert(context != nullptr);
 
 	o = pa_context_subscribe(context,
-				 (pa_subscription_mask_t)PA_SUBSCRIPTION_MASK_SINK_INPUT,
+				 (pa_subscription_mask_t)PA_SUBSCRIPTION_MASK_SINK_INPUT|PA_SUBSCRIPTION_MASK_SINK,
 				 nullptr, nullptr);
 	if (o == nullptr) {
 		LogPulseError(context,
