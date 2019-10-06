@@ -180,7 +180,8 @@ PulseOutput::PulseOutput(const ConfigBlock &block)
 	 name(block.GetBlockValue("name", "mpd_pulse")),
 	 server(block.GetBlockValue("server")),
 	 sink(block.GetBlockValue("sink")),
-	 media_role(block.GetBlockValue("media_role"))
+	 media_role(block.GetBlockValue("media_role")),
+     mixer_type(block.GetBlockValue("mixer_type"))
 {
 	setenv("PULSE_PROP_media.role", "music", true);
 	setenv("PULSE_PROP_application.icon_name", "mpd", true);
